@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": ["es2019", "dom"],
+    "jsx": "react-native",
+    "strict": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "App.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "screens/**/*.ts",
+    "screens/**/*.tsx",
+    "store/**/*.ts",
+    "store/**/*.tsx",
+    "types/**/*.ts",
+    "utils/**/*.ts"
+  ]
+}

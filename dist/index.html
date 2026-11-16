@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Zentavo" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#059669" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Zentavo — Finanzas Personales Multimoneda (RD$ / US$)</title>
+  <style>
+    :root[data-theme="dark"] {
+      --bg: #070E1A;
+      --surface: #0F1B2D;
+      --surface-elevated: #16263F;
+      --border: #1E3352;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --navy: #0F3D68;
+      --emerald: #10B981;
+      --emerald-soft: rgba(16, 185, 129, 0.16);
+      --danger: #EF4444;
+      --danger-soft: rgba(239, 68, 68, 0.16);
+      --warning: #F59E0B;
+      --warning-soft: rgba(245, 158, 11, 0.16);
+      --info: #3B82F6;
+      --info-soft: rgba(59, 130, 246, 0.16);
+      --shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #F1F5F9;
+      --surface: #FFFFFF;
+      --surface-elevated: #F8FAFC;
+      --border: #E2E8F0;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #64748B;
+      --navy: #0B2F52;
+      --emerald: #059669;
+      --emerald-soft: rgba(5, 150, 105, 0.12);
+      --danger: #DC2626;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+      --warning: #D97706;
+      --warning-soft: rgba(217, 119, 6, 0.12);
+      --info: #2563EB;
+      --info-soft: rgba(37, 99, 235, 0.12);
+      --shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Mobile Shell Container */
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: #fff;
+      font-weight: 900;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+
+    .brand-title {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rate-pill {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--emerald);
+      cursor: pointer;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Main Scrollable Content */
+    .screen-content {
+      flex: 1;
+      padding: 16px 16px 104px;
+      overflow-y: auto;
+    }
+
+    /* Hero Net Worth Card */
+    .hero-card {
+      background: linear-gradient(135deg, var(--navy) 0%, #092340 100%);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      border-radius: 22px;
+      padding: 20px;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 28px rgba(15, 61, 104, 0.45);
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #93C5FD;
+    }
+
+    .hero-usd-badge {
+      background: rgba(16, 185, 129, 0.24);
+      color: #6EE7B7;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero-amount {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-metrics {
+      display: flex;
+      background: rgba(7, 14, 26, 0.42);
+      border-radius: 14px;
+      padding: 12px;
+      gap: 12px;
+    }
+
+    .hero-metric-col {
+      flex: 1;
+    }
+
+    .hero-metric-col + .hero-metric-col {
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
+      padding-left: 12px;
+    }
+
+    .hero-metric-label {
+      font-size: 11px;
+      color: #CBD5E1;
+      margin-bottom: 3px;
+    }
+
+    .hero-metric-val {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    /* Wallet Card & Quick Actions (Apple Wallet Style) */
+    .wallet-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 4px 0 12px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #ffffff;
+    }
+
+    /* Tarjeta estilo Apple Wallet */
+    .wallet-card {
+      background: linear-gradient(135deg, #1e1e2f 0%, #0f0f1a 100%);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 24px;
+      transition: transform 0.3s ease;
+    }
+
+    .wallet-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #a0a0ab;
+      margin-bottom: 20px;
+    }
+
+    .card-balance h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+      color: #ffffff;
+    }
+
+    .card-number {
+      font-size: 14px;
+      color: #8e8e93;
+      letter-spacing: 2px;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      font-size: 13px;
+      color: #aeaeb2;
+    }
+
+    /* Botones de acción rápida */
+    .wallet-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: #2c2c2e;
+      border: none;
+      border-radius: 14px;
+      padding: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+
+    .action-btn span {
+      font-size: 18px;
+    }
+
+    .action-btn:hover {
+      background: #3a3a3c;
+    }
+
+    /* Transacciones */
+    .transactions-section {
+      margin-top: 8px;
+    }
+
+    .transactions-section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      background: #1c1c1e;
+      padding: 12px 16px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+
+    .tx-icon {
+      font-size: 20px;
+      background: #2c2c2e;
+      padding: 10px;
+      border-radius: 10px;
+      margin-right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tx-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tx-info h4 {
+      margin: 0 0 4px 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tx-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #8e8e93;
+    }
+
+    .tx-amount {
+      font-weight: 600;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tx-amount.negative {
+      color: #ff453a;
+    }
+
+    .tx-amount.positive {
+      color: #30d158;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 14px 0 10px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .section-action {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--emerald);
+      background: var(--emerald-soft);
+      padding: 5px 11px;
+      border-radius: 99px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Horizontal Accounts Carousel */
+    .carousel-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+
+    .account-card {
+      min-width: 238px;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-top-width: 4px;
+      border-radius: 16px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .account-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .acc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .acc-type {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .curr-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .acc-name {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .acc-caption {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .acc-balance {
+      font-size: 20px;
+      font-weight: 900;
+      margin-top: 2px;
+    }
+
+    .acc-sub {
+      font-size: 11px;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .add-acc-card {
+      min-width: 170px;
+      background-color: var(--surface-elevated);
+      border: 1.5px dashed var(--emerald);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      gap: 6px;
+    }
+
+    /* Generic Card */
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      margin-bottom: 14px;
+    }
+
+    /* Progress Bars */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-elevated);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    /* Transactions List */
+    .tx-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tx-row:last-child {
+      border-bottom: none;
+    }
+
+    .cat-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .tx-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tx-note {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tx-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .tx-installment {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--warning);
+      margin-top: 3px;
+    }
+
+    .tx-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tx-amount {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .tx-date {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Filter Pills & Search */
+    .search-box {
+      display: flex;
+      align-items: center;
+      background-color: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 12px;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 13px;
+      width: 100%;
+      outline: none;
+    }
+
+    .pills-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .pill-btn {
+      padding: 6px 13px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background-color: var(--surface-elevated);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .pill-btn.active {
+      background-color: var(--emerald);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+
+    /* Day Group Card */
+    .day-group {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background-color: var(--surface-elevated);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tx-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .mini-btn {
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background-color: var(--surface-elevated);
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .mini-btn.danger {
+      background-color: var(--danger-soft);
+      border-color: transparent;
+      color: var(--danger);
+    }
+
+    /* Bottom Navigation Bar + Central FAB */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      height: 74px;
+      background-color: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 30;
+      padding: 0 8px 6px;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding-top: 6px;
+    }
+
+    .nav-item.active {
+      color: var(--emerald);
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+    }
+
+    .nav-label {
+      font-size: 11px;
+    }
+
+    .fab-holder {
+      width: 72px;
+      display: flex;
+      justify-content: center;
+      margin-top: -30px;
+    }
+
+    .fab-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 29px;
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: #fff;
+      border: 4px solid var(--bg);
+      font-size: 30px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 480px;
+      max-height: 92vh;
+      background-color: var(--surface);
+      border-top: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* Type Switch Tabs in Modal */
+    .type-tabs {
+      display: flex;
+      background-color: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 12px;
+    }
+
+    .type-tab {
+      flex: 1;
+      padding: 9px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Numeric Keypad */
+    .amount-box {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .key-btn {
+      padding: 11px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background-color: var(--surface-elevated);
+      color: var(--text-primary);
+      font-size: 20px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .key-btn:active {
+      background-color: var(--emerald-soft);
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin: 10px 0 6px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background-color: var(--surface-elevated);
+      color: var(--text-primary);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .cat-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background-color: var(--surface-elevated);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .cat-option.selected {
+      border-color: var(--emerald);
+      background-color: var(--emerald-soft);
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background-color: var(--emerald);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .installment-box {
+      border: 1px solid var(--emerald);
+      background-color: var(--surface-elevated);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .months-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .month-chip {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .month-chip.active {
+      background-color: var(--emerald);
+      border-color: var(--emerald);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Bar -->
+    <header class="top-header">
+      <div class="brand-row">
+        <div class="logo-badge">Z</div>
+        <div>
+          <div class="brand-title">Zentavo</div>
+          <div class="brand-sub">Wallet Multimoneda RD$ / US$</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="section-action" id="openControlCenterBtn" style="display:flex; align-items:center; gap:5px; padding:6px 10px; border:1px solid var(--emerald); border-radius:10px; font-size:11px; font-weight:800;">
+          🎛️ Panel de Control
+        </button>
+        <div class="rate-pill tabular" id="headerRatePill" title="Tasa activa USD a DOP">
+          1 US$ = RD$ 60.50
+        </div>
+        <button class="icon-btn" id="themeToggleBtn" title="Cambiar Modo Oscuro / Claro">☀️</button>
+      </div>
+    </header>
+
+    <!-- Main Dynamic Screen Container -->
+    <main class="screen-content" id="screenContainer"></main>
+
+    <!-- Bottom Navigation + Central FAB -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Inicio</span>
+      </button>
+      <button class="nav-item" data-tab="transactions">
+        <span class="nav-icon">🧾</span>
+        <span class="nav-label">Historial</span>
+      </button>
+      <div class="fab-holder">
+        <button class="fab-btn" id="openQuickModalBtn" title="Registrar Movimiento">＋</button>
+      </div>
+      <button class="nav-item" data-tab="planning">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">Planificación</span>
+      </button>
+      <button class="nav-item" data-tab="analytics">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Análisis</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL 1: Central Quick Transaction (+ / Edit) -->
+  <div class="modal-backdrop" id="quickTxModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title" id="txModalTitle">Registro Rápido</div>
+        <button class="icon-btn" id="closeQuickModalBtn">✕</button>
+      </div>
+
+      <div class="type-tabs">
+        <button class="type-tab" data-txtype="expense" id="tabExpense">Gasto</button>
+        <button class="type-tab" data-txtype="income" id="tabIncome">Ingreso</button>
+        <button class="type-tab" data-txtype="transfer" id="tabTransfer">Transferencia</button>
+      </div>
+
+      <div class="amount-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <div style="display:flex; gap:6px;">
+            <button class="pill-btn active" id="currBtnDOP">RD$ (DOP)</button>
+            <button class="pill-btn" id="currBtnUSD">US$ (USD)</button>
+          </div>
+          <span style="font-size:11px; color:var(--text-muted);" class="tabular" id="modalRateLabel">
+            Tasa: 60.50
+          </span>
+        </div>
+        <div class="tabular" id="keypadDisplay" style="font-size:32px; font-weight:900; text-align:right; color:var(--danger);">
+          RD$ 0
+        </div>
+      </div>
+
+      <!-- Large Numeric Keypad -->
+      <div class="keypad-grid" id="keypadGrid">
+        <button class="key-btn" data-key="1">1</button>
+        <button class="key-btn" data-key="2">2</button>
+        <button class="key-btn" data-key="3">3</button>
+        <button class="key-btn" data-key="4">4</button>
+        <button class="key-btn" data-key="5">5</button>
+        <button class="key-btn" data-key="6">6</button>
+        <button class="key-btn" data-key="7">7</button>
+        <button class="key-btn" data-key="8">8</button>
+        <button class="key-btn" data-key="9">9</button>
+        <button class="key-btn" data-key=".">.</button>
+        <button class="key-btn" data-key="0">0</button>
+        <button class="key-btn" data-key="BACK">⌫</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label class="form-label" id="originAccLabel">Cuenta Origen</label>
+          <select class="form-select" id="txOriginAccount"></select>
+        </div>
+        <div id="destAccContainer" style="display:none;">
+          <label class="form-label">Cuenta Destino</label>
+          <select class="form-select" id="txDestAccount"></select>
+        </div>
+        <div id="dateFieldContainer">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-input" id="txDateInput" value="2026-11-13" />
+        </div>
+      </div>
+
+      <!-- Credit Card Installments Special Feature -->
+      <div class="installment-box" id="ccInstallmentBox" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:13px; font-weight:800;">💳 Dividir en cuotas (meses)</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Programa cargos mensuales futuros</div>
+          </div>
+          <input type="checkbox" id="ccSplitToggle" style="width:20px; height:20px; accent-color:var(--emerald);" />
+        </div>
+        <div id="ccMonthsSelector" style="display:none;">
+          <div class="months-row">
+            <button type="button" class="month-chip" data-months="1">1 mes</button>
+            <button type="button" class="month-chip active" data-months="3">3 meses</button>
+            <button type="button" class="month-chip" data-months="6">6 meses</button>
+            <button type="button" class="month-chip" data-months="12">12 meses</button>
+          </div>
+          <div id="ccMonthlyQuote" class="tabular" style="margin-top:8px; font-size:12px; font-weight:800; color:var(--emerald);">
+            Cuota mensual: RD$ 0.00 / mes
+          </div>
+        </div>
+      </div>
+
+      <div id="categorySection">
+        <label class="form-label">Categoría</label>
+        <div class="cat-grid" id="txCategoryGrid"></div>
+      </div>
+
+      <label class="form-label">Comercio / Nota</label>
+      <input type="text" class="form-input" id="txNoteInput" placeholder="Ej. Supermercados Nacional, Shell, Uber..." />
+
+      <button class="primary-btn" id="submitTxBtn">Guardar Movimiento</button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Add / Edit Account -->
+  <div class="modal-backdrop" id="accountModal">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title" id="accModalTitle">Nueva Cuenta</div>
+        <button class="icon-btn" id="closeAccModalBtn">✕</button>
+      </div>
+      <label class="form-label">Nombre de la Cuenta o Tarjeta</label>
+      <input type="text" class="form-input" id="accNameInput" placeholder="Ej. BHD Ahorros, Visa Popular..." />
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div>
+          <label class="form-label">Tipo de Cuenta</label>
+          <select class="form-select" id="accTypeSelect">
+            <option value="debit">🏦 Cuenta Débito</option>
+            <option value="savings">🐷 Ahorros</option>
+            <option value="cash">💵 Efectivo</option>
+            <option value="credit_card">💳 Tarjeta de Crédito</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Moneda</label>
+          <select class="form-select" id="accCurrSelect">
+            <option value="DOP">RD$ (Peso Dominicano)</option>
+            <option value="USD">US$ (Dólar Estadounidense)</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="form-label" id="accBalanceLabel">Saldo Disponible Inicial</label>
+      <input type="number" step="0.01" class="form-input tabular" id="accBalanceInput" placeholder="0.00" />
+
+      <div id="accCreditFields" style="display:none;">
+        <label class="form-label">Límite de Crédito Total</label>
+        <input type="number" step="0.01" class="form-input tabular" id="accLimitInput" value="100000" />
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label class="form-label">Día de Corte (1-31)</label>
+            <input type="number" class="form-input" id="accCutoffInput" value="18" />
+          </div>
+          <div>
+            <label class="form-label">Día de Pago (1-31)</label>
+            <input type="number" class="form-input" id="accDueInput" value="8" />
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="primary-btn" id="deleteAccBtn" style="background:var(--danger-soft); color:var(--danger); flex:1; margin-top:0; display:none;">
+          Eliminar
+        </button>
+        <button class="primary-btn" id="saveAccBtn" style="flex:2; margin-top:0;">
+          Guardar Cuenta
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Panel de Control Avanzado ("Control Center") -->
+  <div class="modal-backdrop" id="controlCenterModal">
+    <div class="modal-sheet" style="max-height:94vh;">
+      <div class="modal-header" style="border-bottom:1px solid var(--border); padding-bottom:12px;">
+        <div>
+          <span style="background:var(--emerald-soft); color:var(--emerald); font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px; letter-spacing:0.8px;">
+            CONTROL CENTER EJECUTIVO
+          </span>
+          <div class="modal-title" style="margin-top:4px;">🎛️ Panel de Control Avanzado</div>
+        </div>
+        <button class="icon-btn" id="closeControlCenterBtn">✕</button>
+      </div>
+
+      <div id="controlCenterBanner" style="display:none; padding:10px 12px; border-radius:10px; font-size:12px; font-weight:800; margin-bottom:12px;"></div>
+
+      <div id="controlCenterBody"></div>
+      <input type="file" id="jsonFileInput" accept=".json,application/json" style="display:none;" />
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = '@zentavo_store_v2_clean';
+    const LEGACY_STORAGE_KEY = '@zentavo_offline_store_v1';
+
+    const ICON_MAP = {
+      utensils: '🍽️',
+      car: '⛽',
+      bolt: '⚡',
+      heart: '🏥',
+      home: '🏠',
+      film: '🎬',
+      briefcase: '💼',
+      'trending-up': '📈',
+      transfer: '⇄',
+    };
+
+    const INITIAL_STATE = {
+      exchangeRate: 60.50,
+      theme: 'dark',
+      categories: [
+        { id: 'cat-food', name: 'Comida & Supermercado', type: 'expense', icon: 'utensils', color: '#F59E0B' },
+        { id: 'cat-transport', name: 'Transporte & Combustible', type: 'expense', icon: 'car', color: '#3B82F6' },
+        { id: 'cat-services', name: 'Servicios & Facturas', type: 'expense', icon: 'bolt', color: '#8B5CF6' },
+        { id: 'cat-health', name: 'Salud & Farmacia', type: 'expense', icon: 'heart', color: '#EC4899' },
+        { id: 'cat-home', name: 'Hogar & Alquiler', type: 'expense', icon: 'home', color: '#06B6D4' },
+        { id: 'cat-leisure', name: 'Ocio & Suscripciones', type: 'expense', icon: 'film', color: '#F97316' },
+        { id: 'cat-salary', name: 'Salario & Nómina', type: 'income', icon: 'briefcase', color: '#10B981' },
+        { id: 'cat-business', name: 'Negocios & Freelance', type: 'income', icon: 'trending-up', color: '#14B8A6' },
+      ],
+      accounts: [],
+      transactions: [],
+      budgets: [],
+      recurring: [],
+      goals: [],
+    };
+
+    // Load or initialize 100% clean state
+    function loadState() {
+      try {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.accounts) && Array.isArray(parsed.transactions)) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      const clean = JSON.parse(JSON.stringify(INITIAL_STATE));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(clean));
+      return clean;
+    }
+
+    let state = loadState();
+    let activeTab = 'dashboard';
+    let txSearchQuery = '';
+    let txTypeFilter = 'all';
+    let txAccountFilter = 'all';
+
+    // Modal state
+    let editingTxId = null;
+    let modalTxType = 'expense';
+    let modalAmountStr = '0';
+    let modalCurrency = 'DOP';
+    let modalCategoryId = 'cat-food';
+    let modalInstallmentMonths = 3;
+    let editingAccountId = null;
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderApp();
+    }
+
+    function formatCurrency(amount, currency = 'DOP', showSign = false) {
+      const abs = Math.abs(amount || 0);
+      const formatted = abs.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const prefix = currency === 'USD' ? 'US$' : 'RD$';
+      const sign = showSign ? (amount > 0 ? '+' : amount < 0 ? '-' : '') : (amount < 0 ? '-' : '');
+      return `${sign}${prefix} ${formatted}`;
+    }
+
+    function convertCurrency(amount, fromCurr, toCurr, rate) {
+      if (fromCurr === toCurr) return amount;
+      const r = rate > 0 ? rate : state.exchangeRate;
+      return fromCurr === 'USD' && toCurr === 'DOP'
+        ? Number((amount * r).toFixed(2))
+        : Number((amount / r).toFixed(2));
+    }
+
+    function toBaseDOP(amount, curr, rate) {
+      return convertCurrency(amount, curr, 'DOP', rate || state.exchangeRate);
+    }
+
+    function applyTransactionToAccounts(accounts, tx, direction = 1) {
+      return accounts.map(acc => {
+        let bal = acc.balance;
+        if (acc.id === tx.accountId) {
+          const amtInAcc = convertCurrency(tx.amount, tx.currency, acc.currency, tx.exchangeRate);
+          if (tx.type === 'expense' || tx.type === 'transfer') {
+            bal = acc.type === 'credit_card' ? bal + direction * amtInAcc : bal - direction * amtInAcc;
+          } else if (tx.type === 'income') {
+            bal = acc.type === 'credit_card' ? Math.max(0, bal - direction * amtInAcc) : bal + direction * amtInAcc;
+          }
+        }
+        if (tx.type === 'transfer' && tx.destinationAccountId && acc.id === tx.destinationAccountId) {
+          const amtInDest = convertCurrency(tx.amount, tx.currency, acc.currency, tx.exchangeRate);
+          bal = acc.type === 'credit_card' ? Math.max(0, bal - direction * amtInDest) : bal + direction * amtInDest;
+        }
+        return { ...acc, balance: Number(bal.toFixed(2)) };
+      });
+    }
+
+    function calculateNetWorth() {
+      let assetsDOP = 0;
+      let debtDOP = 0;
+      state.accounts.forEach(acc => {
+        const dop = toBaseDOP(acc.balance, acc.currency, state.exchangeRate);
+        if (acc.type === 'credit_card') debtDOP += dop;
+        else assetsDOP += dop;
+      });
+      return {
+        netWorthDOP: assetsDOP - debtDOP,
+        assetsDOP,
+        debtDOP,
+        netWorthUSD: convertCurrency(assetsDOP - debtDOP, 'DOP', 'USD', state.exchangeRate),
+      };
+    }
+
+    // Render screens
+    function renderDashboard() {
+      const nw = calculateNetWorth();
+      let incomeDOP = 0;
+      let expenseDOP = 0;
+      const catTotals = {};
+
+      state.transactions.forEach(tx => {
+        if (tx.type === 'transfer') return;
+        const dop = toBaseDOP(tx.amount, tx.currency, tx.exchangeRate);
+        if (tx.type === 'income') incomeDOP += dop;
+        else if (tx.type === 'expense') {
+          expenseDOP += dop;
+          catTotals[tx.categoryId] = (catTotals[tx.categoryId] || 0) + dop;
+        }
+      });
+
+      const maxFlow = Math.max(incomeDOP, expenseDOP, 1);
+      const top3 = Object.entries(catTotals)
+        .map(([catId, total]) => {
+          const c = state.categories.find(x => x.id === catId) || { name: 'Otros', icon: 'utensils', color: '#10B981' };
+          return { ...c, total, pct: expenseDOP > 0 ? (total / expenseDOP) * 100 : 0 };
+        })
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 3);
+
+      const recentTx = [...state.transactions].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+
+      const typeLabelMap = {
+        cash: '💵 Efectivo',
+        debit: '🏦 Cuenta Débito',
+        savings: '🐷 Ahorros',
+        credit_card: '💳 Tarjeta Crédito',
+      };
+
+      return `
+        <div class="wallet-container">
+          <!-- Tarjeta Principal estilo Wallet -->
+          <div class="wallet-card">
+            <div class="card-header">
+              <div>
+                <span class="card-title">Zentavo Balance</span>
+                <span class="hero-usd-badge tabular" style="margin-left:8px;">≈ ${formatCurrency(nw.netWorthUSD, 'USD')}</span>
+              </div>
+              <span class="card-chip">💳</span>
+            </div>
+            <div class="card-balance">
+              <h2>${formatCurrency(nw.netWorthDOP, 'DOP')}</h2>
+              <p class="card-number">•••• •••• •••• 8834</p>
+            </div>
+            <div class="hero-metrics" style="margin-top:14px;">
+              <div class="hero-metric-col">
+                <div class="hero-metric-label">Activos Líquidos</div>
+                <div class="hero-metric-val tabular" style="color:#34D399;">${formatCurrency(nw.assetsDOP, 'DOP')}</div>
+              </div>
+              <div class="hero-metric-col">
+                <div class="hero-metric-label">Deuda Tarjetas (TC)</div>
+                <div class="hero-metric-val tabular" style="color:#FCA5A5;">-${formatCurrency(nw.debtDOP, 'DOP')}</div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span>Miguel Cuevas</span>
+              <span>12/28</span>
+            </div>
+          </div>
+
+          <!-- Botones de Acción Rápida -->
+          <div class="wallet-actions">
+            <button class="action-btn" onclick="openQuickModalWithPreset('expense', 'Envío / Pago')">
+              <span>↑</span> Enviar
+            </button>
+            <button class="action-btn" onclick="openQuickModalWithPreset('income', 'Depósito Recibido')">
+              <span>↓</span> Recibir
+            </button>
+            <button class="action-btn" onclick="openQuickModalWithPreset('income', 'Recarga Zentavo')">
+              <span>+</span> Recargar
+            </button>
+          </div>
+        </div>
+
+        <!-- Accounts Carousel -->
+        <div class="section-header">
+          <div class="section-title">Mis Cuentas & Tarjetas</div>
+          <button class="section-action" onclick="openAccountModal()">+ Agregar Cuenta</button>
+        </div>
+        <div class="carousel-row">
+          ${state.accounts.map(acc => {
+            const isCC = acc.type === 'credit_card';
+            const limit = acc.creditLimit || 100000;
+            const avail = isCC ? Math.max(0, limit - acc.balance) : 0;
+            const utilPct = isCC ? Math.min(100, (acc.balance / limit) * 100) : 0;
+            return `
+              <div class="account-card" style="border-top-color:${acc.color};" onclick="openAccountModal('${acc.id}')">
+                <div>
+                  <div class="acc-top">
+                    <span class="acc-type">${typeLabelMap[acc.type]}</span>
+                    <span class="curr-tag" style="background:${acc.currency === 'USD' ? 'var(--info-soft)' : 'var(--emerald-soft)'}; color:${acc.currency === 'USD' ? 'var(--info)' : 'var(--emerald)'};">
+                      ${acc.currency === 'USD' ? 'US$' : 'RD$'}
+                    </span>
+                  </div>
+                  <div class="acc-name">${acc.name}</div>
+                </div>
+                ${isCC ? `
+                  <div>
+                    <div class="acc-caption">Deuda Actual Usada</div>
+                    <div class="acc-balance tabular" style="color:var(--danger);">${formatCurrency(acc.balance, acc.currency)}</div>
+                    <div class="progress-track">
+                      <div class="progress-fill" style="width:${utilPct}%; background:${utilPct > 80 ? 'var(--danger)' : utilPct > 50 ? 'var(--warning)' : 'var(--emerald)'};"></div>
+                    </div>
+                    <div class="acc-sub tabular" style="color:var(--emerald); display:flex; justify-content:space-between;">
+                      <span>Disp: ${formatCurrency(avail, acc.currency)}</span>
+                      <span style="color:var(--text-muted);">Corte ${acc.cutoffDay || 18}</span>
+                    </div>
+                  </div>
+                ` : `
+                  <div>
+                    <div class="acc-caption">Saldo Disponible</div>
+                    <div class="acc-balance tabular">${formatCurrency(acc.balance, acc.currency)}</div>
+                    <div class="acc-sub tabular" style="color:${acc.currency === 'USD' ? 'var(--emerald)' : 'var(--text-muted)'};">
+                      ${acc.currency === 'USD' ? `≈ ${formatCurrency(toBaseDOP(acc.balance, 'USD'), 'DOP')}` : 'Moneda Base DOP'}
+                    </div>
+                  </div>
+                `}
+              </div>
+            `;
+          }).join('')}
+          <div class="add-acc-card" onclick="openAccountModal()">
+            <div style="width:42px; height:42px; border-radius:21px; background:var(--emerald-soft); color:var(--emerald); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800;">＋</div>
+            <div style="font-size:13px; font-weight:800;">+ Agregar Cuenta</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Efectivo, Débito, Ahorros o TC</div>
+          </div>
+        </div>
+
+        <!-- Monthly Summary -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">Resumen del Mes Actual</div>
+          <div class="card-sub">Ingresos vs. Gastos en RD$ (sin transferencias internas)</div>
+
+          <div style="margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+              <span style="color:var(--text-secondary);">Ingresos del Mes</span>
+              <span class="tabular" style="color:var(--emerald);">+${formatCurrency(incomeDOP, 'DOP')}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:${(incomeDOP / maxFlow) * 100}%; background:var(--emerald);"></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+              <span style="color:var(--text-secondary);">Gastos del Mes</span>
+              <span class="tabular" style="color:var(--danger);">-${formatCurrency(expenseDOP, 'DOP')}</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:${(expenseDOP / maxFlow) * 100}%; background:var(--danger);"></div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
+            <div style="font-size:13px; font-weight:800; margin-bottom:10px;">🔥 Top 3 Categorías con Mayor Gasto</div>
+            ${top3.length === 0 ? `
+              <div style="font-size:12px; color:var(--text-muted); padding:6px 0;">
+                Aún no hay gastos registrados este mes.
+              </div>
+            ` : top3.map((cat, idx) => `
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <div class="cat-badge" style="width:34px; height:34px; font-size:16px; background:${cat.color}22; border:1px solid ${cat.color}55;">
+                  ${ICON_MAP[cat.icon] || '💠'}
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700;">
+                    <span>#${idx + 1} ${cat.name}</span>
+                    <span class="tabular">${formatCurrency(cat.total, 'DOP')} (${cat.pct.toFixed(0)}%)</span>
+                  </div>
+                  <div class="progress-track" style="height:6px;">
+                    <div class="progress-fill" style="width:${cat.pct}%; background:${cat.color};"></div>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Historial de Transacciones Minimalista -->
+        <div class="transactions-section">
+          <h3>
+            <span>Movimientos Recientes</span>
+            <button class="section-action" onclick="switchTab('transactions')">Ver Historial →</button>
+          </h3>
+          ${recentTx.length === 0 ? `
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:18px 8px;">
+              Sin movimientos recientes. Crea primero una cuenta en "+ Agregar Cuenta" y usa los botones Enviar, Recibir, Recargar o ＋ para registrar tus movimientos.
+            </div>
+          ` : recentTx.map(tx => {
+            const cat = state.categories.find(c => c.id === tx.categoryId);
+            const acc = state.accounts.find(a => a.id === tx.accountId);
+            const isTransfer = tx.type === 'transfer';
+            const icon = isTransfer ? '⇄' : (ICON_MAP[cat?.icon] || '🛒');
+            const isNeg = tx.type === 'expense';
+            const sign = isNeg ? '-' : tx.type === 'income' ? '+' : '⇄ ';
+            return `
+              <div class="transaction-item" onclick="openQuickModal('${tx.id}')">
+                <div class="tx-icon">${icon}</div>
+                <div class="tx-info">
+                  <h4>${tx.note}</h4>
+                  <p>${tx.date} · ${acc?.name || 'Zentavo'}</p>
+                </div>
+                <div class="tx-amount ${isNeg ? 'negative' : 'positive'}">
+                  ${sign}${formatCurrency(tx.amount, tx.currency)}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderTxRow(tx, showActions = true) {
+      const cat = state.categories.find(c => c.id === tx.categoryId);
+      const acc = state.accounts.find(a => a.id === tx.accountId);
+      const destAcc = tx.destinationAccountId ? state.accounts.find(a => a.id === tx.destinationAccountId) : null;
+      const isTransfer = tx.type === 'transfer';
+      const icon = isTransfer ? '⇄' : (ICON_MAP[cat?.icon] || '💠');
+      const color = isTransfer ? '#3B82F6' : (cat?.color || '#10B981');
+      const amtColor = tx.type === 'expense' ? 'var(--danger)' : tx.type === 'income' ? 'var(--emerald)' : 'var(--info)';
+      const sign = tx.type === 'expense' ? '-' : tx.type === 'income' ? '+' : '⇄ ';
+
+      return `
+        <div class="tx-row" style="flex-direction:column; align-items:stretch;">
+          <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openQuickModal('${tx.id}')">
+            <div class="cat-badge" style="background:${color}22; border:1px solid ${color}55;">${icon}</div>
+            <div class="tx-info">
+              <div class="tx-note">${tx.note}</div>
+              <div class="tx-meta">
+                ${isTransfer ? `${acc?.name || 'Origen'} → ${destAcc?.name || 'Destino'}` : `${cat?.name || 'Categoría'} · ${acc?.name || 'Cuenta'}`}
+              </div>
+              ${tx.installmentInfo && tx.installmentInfo.totalMonths > 1 ? `
+                <div class="tx-installment tabular">
+                  💳 Cuota ${tx.installmentInfo.currentInstallment}/${tx.installmentInfo.totalMonths} (${formatCurrency(tx.installmentInfo.monthlyInstallmentAmount, tx.currency)}/mes)
+                </div>
+              ` : ''}
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount tabular" style="color:${amtColor};">${sign}${formatCurrency(tx.amount, tx.currency)}</div>
+              <div class="tx-date">${tx.date}</div>
+            </div>
+          </div>
+          ${showActions ? `
+            <div class="tx-actions">
+              <button class="mini-btn" onclick="openQuickModal('${tx.id}')">✏️ Editar</button>
+              <button class="mini-btn danger" onclick="deleteTx('${tx.id}')">🗑️ Eliminar (Recalcular Saldo)</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderTransactionsScreen() {
+      const q = txSearchQuery.trim().toLowerCase();
+      const filtered = state.transactions
+        .filter(tx => {
+          if (txTypeFilter !== 'all' && tx.type !== txTypeFilter) return false;
+          if (txAccountFilter !== 'all' && tx.accountId !== txAccountFilter && tx.destinationAccountId !== txAccountFilter) return false;
+          if (q) {
+            const catName = state.categories.find(c => c.id === tx.categoryId)?.name.toLowerCase() || '';
+            return tx.note.toLowerCase().includes(q) || catName.includes(q);
+          }
+          return true;
+        })
+        .sort((a, b) => b.date.localeCompare(a.date));
+
+      const groups = {};
+      filtered.forEach(tx => {
+        if (!groups[tx.date]) groups[tx.date] = { date: tx.date, items: [], netDOP: 0 };
+        groups[tx.date].items.push(tx);
+        const dop = toBaseDOP(tx.amount, tx.currency, tx.exchangeRate);
+        if (tx.type === 'income') groups[tx.date].netDOP += dop;
+        else if (tx.type === 'expense') groups[tx.date].netDOP -= dop;
+      });
+
+      const dayGroups = Object.values(groups);
+
+      return `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:20px; font-weight:900; margin-bottom:10px;">Historial de Transacciones</div>
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Buscar por comercio, nota o categoría..." value="${txSearchQuery}" oninput="updateTxSearch(this.value)" />
+          </div>
+          <div class="pills-row">
+            ${[
+              { id: 'all', label: 'Todas' },
+              { id: 'expense', label: 'Gastos' },
+              { id: 'income', label: 'Ingresos' },
+              { id: 'transfer', label: 'Transferencias' },
+            ].map(f => `
+              <button class="pill-btn ${txTypeFilter === f.id ? 'active' : ''}" onclick="setTxTypeFilter('${f.id}')">${f.label}</button>
+            `).join('')}
+          </div>
+          <div class="pills-row" style="margin-top:6px;">
+            <button class="pill-btn ${txAccountFilter === 'all' ? 'active' : ''}" onclick="setTxAccountFilter('all')">Todas las Cuentas</button>
+            ${state.accounts.map(a => `
+              <button class="pill-btn ${txAccountFilter === a.id ? 'active' : ''}" onclick="setTxAccountFilter('${a.id}')">${a.name}</button>
+            `).join('')}
+          </div>
+        </div>
+
+        ${dayGroups.length === 0 ? `
+          <div class="card" style="text-align:center; padding:32px;">
+            <div style="font-size:32px; margin-bottom:8px;">🗂️</div>
+            <div style="font-weight:800;">Sin transacciones para estos filtros</div>
+          </div>
+        ` : dayGroups.map(g => `
+          <div class="day-group">
+            <div class="day-header">
+              <span>📅 ${g.date}</span>
+              <span class="tabular" style="color:${g.netDOP >= 0 ? 'var(--emerald)' : 'var(--danger)'};">
+                Balance Neto: ${formatCurrency(g.netDOP, 'DOP', true)}
+              </span>
+            </div>
+            <div style="padding:0 14px;">
+              ${g.items.map(tx => renderTxRow(tx, true)).join('')}
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function renderPlanningScreen() {
+      const spentByCat = {};
+      state.transactions.forEach(tx => {
+        if (tx.type !== 'expense') return;
+        const dop = toBaseDOP(tx.amount, tx.currency, tx.exchangeRate);
+        spentByCat[tx.categoryId] = (spentByCat[tx.categoryId] || 0) + dop;
+      });
+
+      return `
+        <div style="font-size:20px; font-weight:900;">Planificación Financiera</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+          Presupuestos dinámicos, suscripciones fijas y metas de ahorro
+        </div>
+
+        <!-- 1. Monthly Budgets -->
+        <div class="section-header">
+          <div class="section-title">📊 Presupuestos Mensuales</div>
+          <button class="section-action" onclick="promptNewBudget()">+ Crear Límite</button>
+        </div>
+        <div class="card">
+          ${state.budgets.length === 0 ? `
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">
+              Sin presupuestos configurados. Haz clic en "+ Crear Límite" para definir tus topes mensuales.
+            </div>
+          ` : state.budgets.map(b => {
+            const cat = state.categories.find(c => c.id === b.categoryId);
+            const spent = spentByCat[b.categoryId] || 0;
+            const pct = b.limitAmount > 0 ? (spent / b.limitAmount) * 100 : 0;
+            const color = pct > 90 ? 'var(--danger)' : pct >= 70 ? 'var(--warning)' : 'var(--emerald)';
+            const badgeText = pct > 90 ? 'Crítico (>90%)' : pct >= 70 ? 'Alerta (70-90%)' : 'Saludable (<70%)';
+            return `
+              <div style="padding:10px 0; border-bottom:1px solid var(--border);">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:18px;">${ICON_MAP[cat?.icon] || '💠'}</span>
+                    <div>
+                      <div style="font-size:14px; font-weight:800;">${cat?.name || 'Categoría'}</div>
+                      <div class="tabular" style="font-size:11px; color:var(--text-secondary);">
+                        Gastado: ${formatCurrency(spent, 'DOP')} de ${formatCurrency(b.limitAmount, 'DOP')}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tabular" style="font-size:11px; font-weight:800; color:${color};">
+                    ${pct.toFixed(0)}% · ${badgeText}
+                  </div>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width:${Math.min(100, pct)}%; background:${color};"></div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- 2. Recurring Subscriptions -->
+        <div class="section-header">
+          <div class="section-title">🔄 Pagos Recurrentes / Suscripciones</div>
+          <button class="section-action" onclick="promptNewRecurring()">+ Suscripción</button>
+        </div>
+        <div class="card">
+          ${state.recurring.length === 0 ? `
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">
+              Sin suscripciones o pagos recurrentes registrados.
+            </div>
+          ` : state.recurring.map(r => {
+            const acc = state.accounts.find(a => a.id === r.accountId);
+            return `
+              <div style="padding:12px 0; border-bottom:1px solid var(--border);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <div>
+                    <div style="font-size:14px; font-weight:800;">${r.title}</div>
+                    <div style="font-size:11px; color:var(--text-secondary);">
+                      Próximo cobro: <strong>${r.nextDate}</strong> · ${acc?.name || 'Cuenta'}
+                    </div>
+                  </div>
+                  <div class="tabular" style="font-size:15px; font-weight:900;">
+                    ${formatCurrency(r.amount, r.currency)}
+                  </div>
+                </div>
+                <button class="primary-btn" style="margin-top:4px; padding:9px; font-size:12px;" onclick="payRecurringNow('${r.id}')">
+                  ✓ Registrar Pago Ahora
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- 3. Savings Goals -->
+        <div class="section-header">
+          <div class="section-title">🐷 Metas de Ahorro (Alcancías)</div>
+          <button class="section-action" onclick="promptNewGoal()">+ Nueva Meta</button>
+        </div>
+        ${state.goals.length === 0 ? `
+          <div class="card" style="font-size:12px; color:var(--text-muted); text-align:center; padding:18px;">
+            Sin metas de ahorro activas. Haz clic en "+ Nueva Meta" para crear tu primera alcancía.
+          </div>
+        ` : state.goals.map(g => {
+          const pct = g.targetAmount > 0 ? Math.min(100, (g.currentAmount / g.targetAmount) * 100) : 0;
+          return `
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <div>
+                  <div style="font-size:15px; font-weight:800;">🎯 ${g.name}</div>
+                  <div style="font-size:11px; color:var(--text-secondary);">Fecha meta: ${g.deadline}</div>
+                </div>
+                <span class="tabular" style="background:var(--emerald-soft); color:var(--emerald); padding:4px 10px; border-radius:99px; font-size:12px; font-weight:800;">
+                  ${pct.toFixed(1)}%
+                </span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                <div>
+                  <div style="font-size:11px; color:var(--text-secondary);">Ahorrado</div>
+                  <div class="tabular" style="font-size:16px; font-weight:900; color:var(--emerald);">${formatCurrency(g.currentAmount, 'DOP')}</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:11px; color:var(--text-secondary);">Meta Total</div>
+                  <div class="tabular" style="font-size:16px; font-weight:900;">${formatCurrency(g.targetAmount, 'DOP')}</div>
+                </div>
+              </div>
+              <div class="progress-track" style="height:10px;">
+                <div class="progress-fill" style="width:${pct}%; background:var(--emerald);"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+                <span class="tabular" style="font-size:11px; color:var(--text-muted);">
+                  Faltan ${formatCurrency(Math.max(0, g.targetAmount - g.currentAmount), 'DOP')}
+                </span>
+                <button class="section-action" style="background:var(--navy); color:#fff; padding:8px 16px;" onclick="abonarMeta('${g.id}')">
+                  ＋ Abonar a Alcancía
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      `;
+    }
+
+    function renderAnalyticsScreen() {
+      const catTotals = {};
+      let totalExpenseDOP = 0;
+      state.transactions.forEach(tx => {
+        if (tx.type !== 'expense') return;
+        const dop = toBaseDOP(tx.amount, tx.currency, tx.exchangeRate);
+        catTotals[tx.categoryId] = (catTotals[tx.categoryId] || 0) + dop;
+        totalExpenseDOP += dop;
+      });
+
+      const slices = Object.entries(catTotals)
+        .map(([catId, amountDOP]) => {
+          const cat = state.categories.find(c => c.id === catId) || { name: 'Otros', color: '#10B981' };
+          return {
+            name: cat.name,
+            color: cat.color,
+            amountDOP,
+            pct: totalExpenseDOP > 0 ? (amountDOP / totalExpenseDOP) * 100 : 0,
+          };
+        })
+        .sort((a, b) => b.amountDOP - a.amountDOP);
+
+      // Build conic-gradient for Donut Chart
+      let accDeg = 0;
+      const gradientStops = slices.map(s => {
+        const start = accDeg;
+        accDeg += (s.pct / 100) * 360;
+        return `${s.color} ${start.toFixed(1)}deg ${accDeg.toFixed(1)}deg`;
+      }).join(', ');
+
+      return `
+        <div style="font-size:20px; font-weight:900;">Análisis & Ajustes</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+          Distribución por categoría, tasa de cambio US$ → RD$ y exportación CSV
+        </div>
+
+        <!-- Donut Chart -->
+        <div class="card">
+          <div class="card-title">🍩 Distribución de Gastos por Categoría</div>
+          <div class="card-sub">Porcentaje sobre el gasto total consolidado en RD$</div>
+
+          <div style="display:flex; justify-content:center; margin:16px 0;">
+            <div style="width:180px; height:180px; border-radius:50%; background:conic-gradient(${gradientStops || 'var(--border) 0deg 360deg'}); display:flex; align-items:center; justify-content:center;">
+              <div style="width:126px; height:126px; border-radius:50%; background:var(--surface); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; text-align:center;">
+                <span style="font-size:11px; color:var(--text-secondary);">Total Gastos</span>
+                <span class="tabular" style="font-size:14px; font-weight:900; margin-top:3px;">${formatCurrency(totalExpenseDOP, 'DOP')}</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            ${slices.length === 0 ? `
+              <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:8px 0;">
+                Sin gastos registrados para graficar.
+              </div>
+            ` : slices.map(s => `
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--border); font-size:13px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="width:10px; height:10px; border-radius:5px; background:${s.color}; display:inline-block;"></span>
+                  <span style="font-weight:700;">${s.name}</span>
+                </div>
+                <div class="tabular" style="font-weight:800;">
+                  ${s.pct.toFixed(1)}% · ${formatCurrency(s.amountDOP, 'DOP')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Real-time Exchange Rate Configuration -->
+        <div class="card">
+          <div class="card-title">💱 Tasa de Cambio Editable (US$ → RD$)</div>
+          <div class="card-sub">Modifica la tasa para recalcular en tiempo real el Patrimonio Total</div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <span style="background:var(--navy); color:#fff; padding:11px 14px; border-radius:12px; font-weight:800; font-size:13px;">
+              1 US$ = RD$
+            </span>
+            <input type="number" step="0.05" class="form-input tabular" style="font-size:18px; font-weight:900; color:var(--emerald);" value="${state.exchangeRate}" onchange="updateExchangeRate(this.value)" />
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            ${[59.50, 60.50, 61.25, 62.00].map(r => `
+              <button class="pill-btn ${state.exchangeRate === r ? 'active' : ''}" style="flex:1;" onclick="updateExchangeRate(${r})">
+                ${r.toFixed(2)}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Export CSV & Reset All Data to Blank -->
+        <div class="card">
+          <div class="card-title">⚙️ Exportación & Restablecimiento</div>
+          <div class="card-sub">Almacenamiento Offline-First persistente en este dispositivo</div>
+          <button class="primary-btn" style="background:var(--navy); border:1px solid var(--emerald);" onclick="exportToCSV()">
+            📥 Exportar Movimientos a CSV
+          </button>
+          <button class="primary-btn" style="background:var(--danger-soft); color:var(--danger); border:1px solid var(--danger);" onclick="resetDemo()">
+            🗑️ Restablecer y Borrar Todos los Datos (Dejar en Blanco)
+          </button>
+        </div>
+      `;
+    }
+
+    function renderApp() {
+      document.documentElement.setAttribute('data-theme', state.theme || 'dark');
+      document.getElementById('themeToggleBtn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+      document.getElementById('headerRatePill').textContent = `1 US$ = RD$ ${Number(state.exchangeRate).toFixed(2)}`;
+
+      const container = document.getElementById('screenContainer');
+      if (activeTab === 'dashboard') container.innerHTML = renderDashboard();
+      else if (activeTab === 'transactions') container.innerHTML = renderTransactionsScreen();
+      else if (activeTab === 'planning') container.innerHTML = renderPlanningScreen();
+      else if (activeTab === 'analytics') container.innerHTML = renderAnalyticsScreen();
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === activeTab);
+      });
+    }
+
+    // Navigation & Interactive Handlers
+    window.switchTab = function(tab) {
+      activeTab = tab;
+      renderApp();
+    };
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    document.getElementById('headerRatePill').addEventListener('click', () => switchTab('analytics'));
+
+    document.getElementById('themeToggleBtn').addEventListener('click', () => {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      saveState();
+    });
+
+    window.updateTxSearch = function(val) {
+      txSearchQuery = val;
+      renderApp();
+    };
+
+    window.setTxTypeFilter = function(t) {
+      txTypeFilter = t;
+      renderApp();
+    };
+
+    window.setTxAccountFilter = function(accId) {
+      txAccountFilter = accId;
+      renderApp();
+    };
+
+    window.deleteTx = function(txId) {
+      const target = state.transactions.find(t => t.id === txId);
+      if (!target) return;
+      state.accounts = applyTransactionToAccounts(state.accounts, target, -1);
+      state.transactions = state.transactions.filter(t => t.id !== txId);
+      saveState();
+    };
+
+    window.payRecurringNow = function(recId) {
+      const rec = state.recurring.find(r => r.id === recId);
+      if (!rec) return;
+      const newTx = {
+        id: 'tx-' + Date.now(),
+        accountId: rec.accountId,
+        categoryId: rec.categoryId,
+        type: 'expense',
+        amount: rec.amount,
+        currency: rec.currency,
+        exchangeRate: state.exchangeRate,
+        note: `${rec.title} (Pago Recurrente)`,
+        date: new Date().toISOString().split('T')[0],
+      };
+      state.accounts = applyTransactionToAccounts(state.accounts, newTx, 1);
+      state.transactions.unshift(newTx);
+
+      const d = new Date(rec.nextDate + 'T12:00:00');
+      d.setMonth(d.getMonth() + 1);
+      rec.nextDate = d.toISOString().split('T')[0];
+      saveState();
+    };
+
+    window.abonarMeta = function(goalId) {
+      const g = state.goals.find(x => x.id === goalId);
+      if (!g) return;
+      const input = prompt(`¿Cuánto deseas abonar en RD$ a "${g.name}"?`, '5000');
+      const amt = parseFloat(input);
+      if (!amt || amt <= 0) return;
+      g.currentAmount = Number((g.currentAmount + amt).toFixed(2));
+      saveState();
+    };
+
+    window.promptNewBudget = function() {
+      const limitStr = prompt('Ingresa el nuevo límite mensual (RD$) para Transporte & Combustible:', '10000');
+      const val = parseFloat(limitStr);
+      if (!val || val <= 0) return;
+      state.budgets = state.budgets.filter(b => b.categoryId !== 'cat-transport');
+      state.budgets.push({ id: 'bgt-' + Date.now(), categoryId: 'cat-transport', limitAmount: val, period: 'monthly' });
+      saveState();
+    };
+
+    window.promptNewRecurring = function() {
+      if (state.accounts.length === 0) {
+        alert('Primero debes crear al menos una cuenta financiera para asociar el pago recurrente.');
+        openAccountModal();
+        return;
+      }
+      const title = prompt('Nombre de la suscripción o pago fijo:', 'Netflix / Internet');
+      if (!title) return;
+      const amt = parseFloat(prompt('Monto mensual (RD$):', '1000') || '0');
+      if (amt <= 0) return;
+      state.recurring.push({
+        id: 'rec-' + Date.now(),
+        title,
+        amount: amt,
+        currency: 'DOP',
+        accountId: state.accounts[0].id,
+        categoryId: 'cat-leisure',
+        nextDate: new Date().toISOString().split('T')[0],
+        frequency: 'monthly',
+      });
+      saveState();
+    };
+
+    window.promptNewGoal = function() {
+      const name = prompt('Nombre de la nueva Meta de Ahorro:', '');
+      if (!name) return;
+      const target = parseFloat(prompt('Monto Meta en RD$:', '') || '0');
+      if (target <= 0) return;
+      state.goals.push({
+        id: 'goal-' + Date.now(),
+        name,
+        targetAmount: target,
+        currentAmount: 0,
+        deadline: '2027-12-31',
+      });
+      saveState();
+    };
+
+    window.updateExchangeRate = function(val) {
+      const num = parseFloat(val);
+      if (!num || num <= 0) return;
+      state.exchangeRate = Number(num.toFixed(2));
+      saveState();
+    };
+
+    window.exportToCSV = function() {
+      const headers = ['ID,Fecha,Tipo,Comercio/Nota,Monto,Moneda,Tasa,Equivalente_DOP'];
+      const rows = state.transactions.map(t => {
+        const dop = toBaseDOP(t.amount, t.currency, t.exchangeRate).toFixed(2);
+        return `${t.id},${t.date},${t.type.toUpperCase()},"${t.note.replace(/"/g, '""')}",${t.amount.toFixed(2)},${t.currency},${t.exchangeRate},${dop}`;
+      });
+      const csv = headers.concat(rows).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'zentavo_movimientos.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    window.resetDemo = function() {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+      localStorage.removeItem(STORAGE_KEY);
+      state = {
+        ...JSON.parse(JSON.stringify(INITIAL_STATE)),
+        accounts: [],
+        transactions: [],
+        budgets: [],
+        recurring: [],
+        goals: [],
+      };
+      saveState();
+      if (document.getElementById('controlCenterModal').classList.contains('open')) {
+        renderControlCenterContent();
+        showCCBanner('✓ Todos los registros han sido eliminados (App 100% en blanco).');
+      }
+    };
+
+    // Quick Transaction Modal Logic
+    function syncQuickModalUI() {
+      document.getElementById('tabExpense').style.background = modalTxType === 'expense' ? 'var(--danger)' : 'transparent';
+      document.getElementById('tabExpense').style.color = modalTxType === 'expense' ? '#fff' : 'var(--text-secondary)';
+      document.getElementById('tabIncome').style.background = modalTxType === 'income' ? 'var(--emerald)' : 'transparent';
+      document.getElementById('tabIncome').style.color = modalTxType === 'income' ? '#fff' : 'var(--text-secondary)';
+      document.getElementById('tabTransfer').style.background = modalTxType === 'transfer' ? 'var(--info)' : 'transparent';
+      document.getElementById('tabTransfer').style.color = modalTxType === 'transfer' ? '#fff' : 'var(--text-secondary)';
+
+      document.getElementById('currBtnDOP').classList.toggle('active', modalCurrency === 'DOP');
+      document.getElementById('currBtnUSD').classList.toggle('active', modalCurrency === 'USD');
+      document.getElementById('modalRateLabel').textContent = `Tasa: 1 US$ = RD$ ${state.exchangeRate.toFixed(2)}`;
+
+      const disp = document.getElementById('keypadDisplay');
+      disp.textContent = `${modalCurrency === 'USD' ? 'US$' : 'RD$'} ${modalAmountStr}`;
+      disp.style.color = modalTxType === 'expense' ? 'var(--danger)' : modalTxType === 'income' ? 'var(--emerald)' : 'var(--info)';
+
+      document.getElementById('destAccContainer').style.display = modalTxType === 'transfer' ? 'block' : 'none';
+      document.getElementById('categorySection').style.display = modalTxType === 'transfer' ? 'none' : 'block';
+
+      // Check if origin account is credit_card
+      const originId = document.getElementById('txOriginAccount').value;
+      const originAcc = state.accounts.find(a => a.id === originId);
+      const isCC = originAcc && originAcc.type === 'credit_card' && modalTxType === 'expense';
+      document.getElementById('ccInstallmentBox').style.display = isCC ? 'block' : 'none';
+
+      const splitChecked = document.getElementById('ccSplitToggle').checked;
+      document.getElementById('ccMonthsSelector').style.display = (isCC && splitChecked) ? 'block' : 'none';
+      const numAmt = parseFloat(modalAmountStr) || 0;
+      document.getElementById('ccMonthlyQuote').textContent =
+        `Cuota mensual: ${formatCurrency(numAmt / modalInstallmentMonths, modalCurrency)} / mes durante ${modalInstallmentMonths} meses`;
+
+      // Render categories
+      const cats = state.categories.filter(c => modalTxType === 'income' ? c.type === 'income' : c.type === 'expense');
+      if (!cats.some(c => c.id === modalCategoryId) && cats[0]) {
+        modalCategoryId = cats[0].id;
+      }
+      document.getElementById('txCategoryGrid').innerHTML = cats.map(c => `
+        <button type="button" class="cat-option ${c.id === modalCategoryId ? 'selected' : ''}" onclick="selectModalCat('${c.id}')">
+          <span>${ICON_MAP[c.icon] || '💠'}</span>
+          <span>${c.name}</span>
+        </button>
+      `).join('');
+    }
+
+    window.selectModalCat = function(id) {
+      modalCategoryId = id;
+      syncQuickModalUI();
+    };
+
+    window.openQuickModal = function(txId = null) {
+      if (state.accounts.length === 0) {
+        alert('Primero crea tu primera cuenta financiera (Efectivo, Débito, Ahorros o Tarjeta de Crédito) para poder registrar movimientos.');
+        openAccountModal(null);
+        return;
+      }
+      editingTxId = txId;
+      const originSel = document.getElementById('txOriginAccount');
+      const destSel = document.getElementById('txDestAccount');
+      const optionsHtml = state.accounts.map(a => `<option value="${a.id}">${a.name} (${a.currency})</option>`).join('');
+      originSel.innerHTML = optionsHtml;
+      destSel.innerHTML = optionsHtml;
+      if (state.accounts[1]) destSel.value = state.accounts[1].id;
+
+      if (txId) {
+        const tx = state.transactions.find(t => t.id === txId);
+        if (tx) {
+          document.getElementById('txModalTitle').textContent = 'Editar Transacción';
+          modalTxType = tx.type;
+          modalAmountStr = String(tx.amount);
+          modalCurrency = tx.currency;
+          originSel.value = tx.accountId;
+          if (tx.destinationAccountId) destSel.value = tx.destinationAccountId;
+          modalCategoryId = tx.categoryId;
+          document.getElementById('txNoteInput').value = tx.note;
+          document.getElementById('txDateInput').value = tx.date;
+          const hasInst = tx.installmentInfo && tx.installmentInfo.totalMonths > 1;
+          document.getElementById('ccSplitToggle').checked = Boolean(hasInst);
+          modalInstallmentMonths = hasInst ? tx.installmentInfo.totalMonths : 3;
+        }
+      } else {
+        document.getElementById('txModalTitle').textContent = 'Registro Rápido';
+        modalTxType = 'expense';
+        modalAmountStr = '0';
+        modalCurrency = 'DOP';
+        modalCategoryId = 'cat-food';
+        document.getElementById('txNoteInput').value = '';
+        document.getElementById('txDateInput').value = '2026-11-13';
+        document.getElementById('ccSplitToggle').checked = false;
+        modalInstallmentMonths = 3;
+      }
+
+      document.getElementById('quickTxModal').classList.add('open');
+      syncQuickModalUI();
+    };
+
+    window.openQuickModalWithPreset = function(presetType = 'expense', defaultNote = '') {
+      if (state.accounts.length === 0) {
+        alert('Primero crea tu primera cuenta financiera (Efectivo, Débito, Ahorros o Tarjeta de Crédito) para poder registrar movimientos.');
+        openAccountModal(null);
+        return;
+      }
+      openQuickModal(null);
+      modalTxType = presetType;
+      modalCategoryId = presetType === 'income' ? 'cat-salary' : 'cat-food';
+      if (defaultNote) {
+        document.getElementById('txNoteInput').value = defaultNote;
+      }
+      syncQuickModalUI();
+    };
+
+    document.getElementById('openQuickModalBtn').addEventListener('click', () => openQuickModal(null));
+    document.getElementById('closeQuickModalBtn').addEventListener('click', () => {
+      document.getElementById('quickTxModal').classList.remove('open');
+    });
+
+    document.querySelectorAll('.type-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modalTxType = btn.dataset.txtype;
+        syncQuickModalUI();
+      });
+    });
+
+    document.getElementById('currBtnDOP').addEventListener('click', () => { modalCurrency = 'DOP'; syncQuickModalUI(); });
+    document.getElementById('currBtnUSD').addEventListener('click', () => { modalCurrency = 'USD'; syncQuickModalUI(); });
+    document.getElementById('txOriginAccount').addEventListener('change', syncQuickModalUI);
+    document.getElementById('ccSplitToggle').addEventListener('change', syncQuickModalUI);
+
+    document.querySelectorAll('.month-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        modalInstallmentMonths = parseInt(chip.dataset.months, 10);
+        document.querySelectorAll('.month-chip').forEach(c => c.classList.toggle('active', c === chip));
+        syncQuickModalUI();
+      });
+    });
+
+    document.getElementById('keypadGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('.key-btn');
+      if (!btn) return;
+      const key = btn.dataset.key;
+      if (key === 'BACK') {
+        modalAmountStr = modalAmountStr.length > 1 ? modalAmountStr.slice(0, -1) : '0';
+      } else if (key === '.') {
+        if (!modalAmountStr.includes('.')) modalAmountStr += '.';
+      } else {
+        if (modalAmountStr === '0') modalAmountStr = key;
+        else {
+          const parts = modalAmountStr.split('.');
+          if (!parts[1] || parts[1].length < 2) modalAmountStr += key;
+        }
+      }
+      syncQuickModalUI();
+    });
+
+    document.getElementById('submitTxBtn').addEventListener('click', () => {
+      const amt = parseFloat(modalAmountStr) || 0;
+      if (amt <= 0) return;
+      const originId = document.getElementById('txOriginAccount').value;
+      const destId = document.getElementById('txDestAccount').value;
+      const originAcc = state.accounts.find(a => a.id === originId);
+      const isCC = originAcc && originAcc.type === 'credit_card' && modalTxType === 'expense';
+      const splitChecked = document.getElementById('ccSplitToggle').checked;
+
+      const noteVal = document.getElementById('txNoteInput').value.trim() ||
+        (modalTxType === 'transfer' ? 'Transferencia entre cuentas' : state.categories.find(c => c.id === modalCategoryId)?.name || 'Movimiento');
+
+      const txPayload = {
+        id: editingTxId || ('tx-' + Date.now()),
+        accountId: originId,
+        destinationAccountId: modalTxType === 'transfer' ? destId : undefined,
+        categoryId: modalCategoryId,
+        type: modalTxType,
+        amount: amt,
+        currency: modalCurrency,
+        exchangeRate: state.exchangeRate,
+        note: noteVal,
+        date: document.getElementById('txDateInput').value || '2026-11-13',
+        installmentInfo: (isCC && splitChecked) ? {
+          totalMonths: modalInstallmentMonths,
+          currentInstallment: 1,
+          monthlyInstallmentAmount: Number((amt / modalInstallmentMonths).toFixed(2)),
+        } : undefined,
+      };
+
+      if (editingTxId) {
+        const oldTx = state.transactions.find(t => t.id === editingTxId);
+        if (oldTx) {
+          const reverted = applyTransactionToAccounts(state.accounts, oldTx, -1);
+          state.accounts = applyTransactionToAccounts(reverted, txPayload, 1);
+          state.transactions = state.transactions.map(t => t.id === editingTxId ? txPayload : t);
+        }
+      } else {
+        state.accounts = applyTransactionToAccounts(state.accounts, txPayload, 1);
+        state.transactions.unshift(txPayload);
+      }
+
+      document.getElementById('quickTxModal').classList.remove('open');
+      saveState();
+    });
+
+    // Account Modal Logic
+    window.openAccountModal = function(accId = null) {
+      editingAccountId = accId;
+      const delBtn = document.getElementById('deleteAccBtn');
+      if (accId) {
+        const acc = state.accounts.find(a => a.id === accId);
+        if (acc) {
+          document.getElementById('accModalTitle').textContent = 'Editar Cuenta';
+          document.getElementById('accNameInput').value = acc.name;
+          document.getElementById('accTypeSelect').value = acc.type;
+          document.getElementById('accCurrSelect').value = acc.currency;
+          document.getElementById('accBalanceInput').value = acc.balance;
+          document.getElementById('accLimitInput').value = acc.creditLimit || 100000;
+          document.getElementById('accCutoffInput').value = acc.cutoffDay || 18;
+          document.getElementById('accDueInput').value = acc.dueDay || 8;
+          delBtn.style.display = 'block';
+        }
+      } else {
+        document.getElementById('accModalTitle').textContent = 'Nueva Cuenta Financiera';
+        document.getElementById('accNameInput').value = '';
+        document.getElementById('accTypeSelect').value = 'debit';
+        document.getElementById('accCurrSelect').value = 'DOP';
+        document.getElementById('accBalanceInput').value = '';
+        delBtn.style.display = 'none';
+      }
+      syncAccModalFields();
+      document.getElementById('accountModal').classList.add('open');
+    };
+
+    function syncAccModalFields() {
+      const t = document.getElementById('accTypeSelect').value;
+      document.getElementById('accCreditFields').style.display = t === 'credit_card' ? 'block' : 'none';
+      document.getElementById('accBalanceLabel').textContent = t === 'credit_card' ? 'Deuda Actual Usada' : 'Saldo Disponible';
+    }
+
+    document.getElementById('accTypeSelect').addEventListener('change', syncAccModalFields);
+    document.getElementById('closeAccModalBtn').addEventListener('click', () => {
+      document.getElementById('accountModal').classList.remove('open');
+    });
+
+    document.getElementById('saveAccBtn').addEventListener('click', () => {
+      const name = document.getElementById('accNameInput').value.trim() || 'Cuenta Zentavo';
+      const type = document.getElementById('accTypeSelect').value;
+      const currency = document.getElementById('accCurrSelect').value;
+      const balance = parseFloat(document.getElementById('accBalanceInput').value) || 0;
+      const payload = {
+        id: editingAccountId || ('acc-' + Date.now()),
+        name,
+        type,
+        currency,
+        balance,
+        color: type === 'credit_card' ? '#1E293B' : currency === 'USD' ? '#10B981' : '#0F3D68',
+        ...(type === 'credit_card' ? {
+          creditLimit: parseFloat(document.getElementById('accLimitInput').value) || 100000,
+          cutoffDay: parseInt(document.getElementById('accCutoffInput').value, 10) || 18,
+          dueDay: parseInt(document.getElementById('accDueInput').value, 10) || 8,
+        } : {}),
+      };
+
+      if (editingAccountId) {
+        state.accounts = state.accounts.map(a => a.id === editingAccountId ? payload : a);
+      } else {
+        state.accounts.push(payload);
+      }
+      document.getElementById('accountModal').classList.remove('open');
+      saveState();
+    });
+
+    document.getElementById('deleteAccBtn').addEventListener('click', () => {
+      if (!editingAccountId) return;
+      state.accounts = state.accounts.filter(a => a.id !== editingAccountId);
+      document.getElementById('accountModal').classList.remove('open');
+      saveState();
+    });
+
+    // =========================================================================
+    // MODULE 5: PANEL DE CONTROL AVANZADO ("CONTROL CENTER")
+    // =========================================================================
+    let ccEditingAccId = null;
+
+    function showCCBanner(text, isError = false) {
+      const el = document.getElementById('controlCenterBanner');
+      if (!el) return;
+      el.style.display = 'block';
+      el.style.background = isError ? 'var(--danger-soft)' : 'var(--emerald-soft)';
+      el.style.color = isError ? 'var(--danger)' : 'var(--emerald)';
+      el.style.border = `1px solid ${isError ? 'var(--danger)' : 'var(--emerald)'}`;
+      el.textContent = text;
+      setTimeout(() => {
+        el.style.display = 'none';
+      }, 4500);
+    }
+
+    function renderControlCenterContent() {
+      const body = document.getElementById('controlCenterBody');
+      if (!body) return;
+
+      // 1. KPI 1: Patrimonio Neto Real
+      const nw = calculateNetWorth();
+
+      // 2. KPI 2: Flujo Neto del Mes & % Ahorro
+      let incDOP = 0;
+      let expDOP = 0;
+      state.transactions.forEach(tx => {
+        if (tx.type === 'transfer') return;
+        const dop = toBaseDOP(tx.amount, tx.currency, tx.exchangeRate);
+        if (tx.type === 'income') incDOP += dop;
+        else if (tx.type === 'expense') expDOP += dop;
+      });
+      const netFlowDOP = incDOP - expDOP;
+      const savingsPct = incDOP > 0 ? ((incDOP - expDOP) / incDOP) * 100 : 0;
+
+      // 3. KPI 3: Uso Global de Crédito & Alerta Próximo Corte
+      const creditCards = state.accounts.filter(a => a.type === 'credit_card');
+      let totalUsedDOP = 0;
+      let totalLimitDOP = 0;
+      let nextCutoffCard = null;
+      const todayDay = new Date().getDate();
+
+      creditCards.forEach(cc => {
+        totalUsedDOP += toBaseDOP(cc.balance, cc.currency, state.exchangeRate);
+        totalLimitDOP += toBaseDOP(cc.creditLimit || 0, cc.currency, state.exchangeRate);
+        const cutoff = cc.cutoffDay || 18;
+        const due = cc.dueDay || 8;
+        const daysRemaining = cutoff >= todayDay ? cutoff - todayDay : (30 - todayDay + cutoff);
+        if (!nextCutoffCard || daysRemaining < nextCutoffCard.daysRemaining) {
+          nextCutoffCard = { name: cc.name, cutoffDay: cutoff, dueDay: due, daysRemaining };
+        }
+      });
+
+      const creditUtilPct = totalLimitDOP > 0 ? (totalUsedDOP / totalLimitDOP) * 100 : 0;
+      const creditColor = creditUtilPct > 70 ? 'var(--danger)' : creditUtilPct > 35 ? 'var(--warning)' : 'var(--emerald)';
+
+      body.innerHTML = `
+        <!-- 1. TARJETAS KPI DE SALUD FINANCIERA -->
+        <div style="font-size:14px; font-weight:900; margin:4px 0 10px;">
+          1. Tarjetas KPI de Salud Financiera
+        </div>
+
+        <!-- KPI 1: Patrimonio Neto Real -->
+        <div class="hero-card" style="padding:16px; margin-bottom:10px;">
+          <div class="hero-top">
+            <span class="hero-label">KPI 1 · PATRIMONIO NETO REAL</span>
+            <span class="hero-usd-badge tabular">≈ ${formatCurrency(nw.netWorthUSD, 'USD')}</span>
+          </div>
+          <div class="tabular" style="font-size:26px; font-weight:900; margin-bottom:10px;">
+            ${formatCurrency(nw.netWorthDOP, 'DOP')}
+          </div>
+          <div class="hero-metrics">
+            <div class="hero-metric-col">
+              <div class="hero-metric-label">Activos Totales</div>
+              <div class="hero-metric-val tabular" style="color:#34D399;">${formatCurrency(nw.assetsDOP, 'DOP')}</div>
+            </div>
+            <div class="hero-metric-col">
+              <div class="hero-metric-label">Deuda en Tarjetas (TC)</div>
+              <div class="hero-metric-val tabular" style="color:#FCA5A5;">-${formatCurrency(nw.debtDOP, 'DOP')}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2 & KPI 3 Grid -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+          <!-- KPI 2: Flujo Neto del Mes -->
+          <div class="card" style="margin-bottom:0; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:10px; font-weight:800; color:var(--text-secondary);">KPI 2 · FLUJO NETO DEL MES</div>
+              <div class="tabular" style="font-size:17px; font-weight:900; margin:6px 0; color:${netFlowDOP >= 0 ? 'var(--emerald)' : 'var(--danger)'};">
+                ${formatCurrency(netFlowDOP, 'DOP', true)}
+              </div>
+              <span class="tabular" style="display:inline-block; background:${savingsPct >= 20 ? 'var(--emerald-soft)' : 'var(--warning-soft)'}; color:${savingsPct >= 20 ? 'var(--emerald)' : 'var(--warning)'}; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:800;">
+                Ahorro: ${savingsPct.toFixed(1)}%
+              </span>
+            </div>
+            <div class="tabular" style="font-size:10px; color:var(--text-muted); margin-top:8px;">
+              Ing: ${formatCurrency(incDOP, 'DOP')}<br/>Gas: ${formatCurrency(expDOP, 'DOP')}
+            </div>
+          </div>
+
+          <!-- KPI 3: Uso Global de Crédito -->
+          <div class="card" style="margin-bottom:0; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:10px; font-weight:800; color:var(--text-secondary);">KPI 3 · USO GLOBAL CRÉDITO</div>
+              <div class="tabular" style="font-size:17px; font-weight:900; margin:6px 0; color:${creditColor};">
+                ${creditUtilPct.toFixed(1)}% utilizado
+              </div>
+              <div class="progress-track" style="height:7px; margin-bottom:6px;">
+                <div class="progress-fill" style="width:${Math.min(100, creditUtilPct)}%; background:${creditColor};"></div>
+              </div>
+            </div>
+            <div style="font-size:10px; font-weight:700; color:var(--warning); line-height:1.35;">
+              ${nextCutoffCard
+                ? `⚠️ Próximo corte: día ${nextCutoffCard.cutoffDay} (en ${nextCutoffCard.daysRemaining} días) · Pago día ${nextCutoffCard.dueDay}`
+                : 'Sin tarjetas registradas'}
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. GESTOR RÁPIDO DE CUENTAS Y DIVISAS -->
+        <div style="font-size:14px; font-weight:900; margin:4px 0 10px;">
+          2. Gestor Rápido de Cuentas y Divisas
+        </div>
+        <div class="card" style="padding:14px;">
+          <!-- Real-Time USD -> DOP Exchange Rate -->
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding-bottom:12px; border-bottom:1px solid var(--border); margin-bottom:12px;">
+            <div>
+              <div style="font-size:13px; font-weight:800;">💱 Tasa de Cambio (USD → DOP)</div>
+              <div style="font-size:11px; color:var(--text-secondary);">Actualización instantánea en tiempo real</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:12px; font-weight:800; color:var(--text-secondary);">RD$</span>
+              <input
+                type="number"
+                step="0.05"
+                class="form-input tabular"
+                style="width:92px; text-align:center; font-size:15px; font-weight:900; color:var(--emerald); border-color:var(--emerald);"
+                value="${state.exchangeRate}"
+                onchange="ccUpdateRate(this.value)"
+              />
+            </div>
+          </div>
+
+          <div style="font-size:11px; font-weight:700; color:var(--text-secondary); margin-bottom:8px;">
+            Control centralizado de saldos, límites de crédito y días de corte/pago:
+          </div>
+
+          ${state.accounts.length === 0 ? `
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px 0;">
+              Sin cuentas registradas. Usa "+ Agregar Cuenta" en el Inicio para crear tu primera cuenta real.
+            </div>
+          ` : state.accounts.map(acc => {
+            const isEditing = ccEditingAccId === acc.id;
+            const isCC = acc.type === 'credit_card';
+            return `
+              <div style="background:var(--surface-elevated); border:1px solid ${isEditing ? 'var(--emerald)' : 'var(--border)'}; border-radius:12px; padding:10px 12px; margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                  <div>
+                    <div style="font-size:13px; font-weight:800;">
+                      ${isCC ? '💳' : '🏦'} ${acc.name} (${acc.currency})
+                    </div>
+                    <div class="tabular" style="font-size:11px; color:var(--text-secondary); margin-top:2px;">
+                      ${isCC
+                        ? `Deuda: ${formatCurrency(acc.balance, acc.currency)} · Límite: ${formatCurrency(acc.creditLimit || 0, acc.currency)} · Corte ${acc.cutoffDay || 18} / Pago ${acc.dueDay || 8}`
+                        : `Saldo actual: ${formatCurrency(acc.balance, acc.currency)}`}
+                    </div>
+                  </div>
+                  <button class="mini-btn" style="background:var(--emerald-soft); color:var(--emerald); border-color:transparent;" onclick="toggleCCAccountEdit('${acc.id}')">
+                    ${isEditing ? 'Cerrar' : 'Ajustar'}
+                  </button>
+                </div>
+
+                ${isEditing ? `
+                  <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+                    <div style="display:grid; grid-template-columns:${isCC ? '1fr 1fr' : '1fr'}; gap:8px; margin-bottom:8px;">
+                      <div>
+                        <label style="font-size:10px; font-weight:700; color:var(--text-secondary);">
+                          ${isCC ? 'Deuda Usada' : 'Saldo Actual'} (${acc.currency})
+                        </label>
+                        <input type="number" step="0.01" id="ccAccBal_${acc.id}" class="form-input tabular" value="${acc.balance}" />
+                      </div>
+                      ${isCC ? `
+                        <div>
+                          <label style="font-size:10px; font-weight:700; color:var(--text-secondary);">Límite Crédito (${acc.currency})</label>
+                          <input type="number" step="0.01" id="ccAccLim_${acc.id}" class="form-input tabular" value="${acc.creditLimit || 100000}" />
+                        </div>
+                      ` : ''}
+                    </div>
+                    ${isCC ? `
+                      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                        <div>
+                          <label style="font-size:10px; font-weight:700; color:var(--text-secondary);">Día de Corte (1-31)</label>
+                          <input type="number" id="ccAccCut_${acc.id}" class="form-input tabular" value="${acc.cutoffDay || 18}" />
+                        </div>
+                        <div>
+                          <label style="font-size:10px; font-weight:700; color:var(--text-secondary);">Día de Pago (1-31)</label>
+                          <input type="number" id="ccAccDue_${acc.id}" class="form-input tabular" value="${acc.dueDay || 8}" />
+                        </div>
+                      </div>
+                    ` : ''}
+                    <button class="primary-btn" style="margin-top:4px; padding:9px; font-size:12px;" onclick="saveCCAccountInline('${acc.id}')">
+                      ✓ Aplicar Cambios en Tiempo Real
+                    </button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- 3. RESPALDO Y PORTABILIDAD (.JSON / .CSV) -->
+        <div style="font-size:14px; font-weight:900; margin:4px 0 10px;">
+          3. Respaldo y Portabilidad (.JSON & .CSV)
+        </div>
+        <div class="card" style="padding:14px;">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
+            Exporta o importa una copia de seguridad completa en formato <strong>.json</strong> o descarga el historial contable en <strong>.csv</strong>.
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+            <button class="primary-btn" style="margin-top:0; padding:11px; font-size:12px;" onclick="exportBackupJSON()">
+              📦 Exportar Backup (.JSON)
+            </button>
+            <button class="primary-btn" style="margin-top:0; padding:11px; font-size:12px; background:var(--surface-elevated); color:var(--emerald); border:1px solid var(--emerald);" onclick="triggerImportJSONFile()">
+              📂 Importar Archivo (.JSON)
+            </button>
+          </div>
+          <button class="primary-btn" style="margin-top:0; padding:11px; font-size:12px; background:var(--navy); border:1px solid var(--emerald); margin-bottom:8px;" onclick="exportToCSV(); showCCBanner('✓ Historial contable .CSV descargado correctamente.');">
+            📊 Exportar Historial Contable (.CSV)
+          </button>
+          <button class="primary-btn" style="margin-top:0; padding:11px; font-size:12px; background:var(--danger-soft); color:var(--danger); border:1px solid var(--danger);" onclick="resetDemo()">
+            🗑️ Restablecer y Borrar Todos los Datos (Dejar en Blanco)
+          </button>
+        </div>
+      `;
+    }
+
+    window.openControlCenter = function() {
+      renderControlCenterContent();
+      document.getElementById('controlCenterModal').classList.add('open');
+    };
+
+    document.getElementById('openControlCenterBtn').addEventListener('click', openControlCenter);
+    document.getElementById('closeControlCenterBtn').addEventListener('click', () => {
+      document.getElementById('controlCenterModal').classList.remove('open');
+    });
+
+    window.ccUpdateRate = function(val) {
+      const parsed = parseFloat(val);
+      if (!parsed || parsed <= 0) return;
+      state.exchangeRate = Number(parsed.toFixed(2));
+      saveState();
+      renderControlCenterContent();
+      showCCBanner(`✓ Tasa actualizada a 1 US$ = RD$ ${state.exchangeRate.toFixed(2)}`);
+    };
+
+    window.toggleCCAccountEdit = function(accId) {
+      ccEditingAccId = ccEditingAccId === accId ? null : accId;
+      renderControlCenterContent();
+    };
+
+    window.saveCCAccountInline = function(accId) {
+      const acc = state.accounts.find(a => a.id === accId);
+      if (!acc) return;
+      const newBal = parseFloat(document.getElementById(`ccAccBal_${accId}`)?.value) || 0;
+      acc.balance = Number(newBal.toFixed(2));
+      if (acc.type === 'credit_card') {
+        const newLim = parseFloat(document.getElementById(`ccAccLim_${accId}`)?.value) || 100000;
+        const newCut = parseInt(document.getElementById(`ccAccCut_${accId}`)?.value, 10) || 18;
+        const newDue = parseInt(document.getElementById(`ccAccDue_${accId}`)?.value, 10) || 8;
+        acc.creditLimit = Number(newLim.toFixed(2));
+        acc.cutoffDay = Math.min(31, Math.max(1, newCut));
+        acc.dueDay = Math.min(31, Math.max(1, newDue));
+      }
+      ccEditingAccId = null;
+      saveState();
+      renderControlCenterContent();
+      showCCBanner(`✓ Cuenta "${acc.name}" actualizada correctamente.`);
+    };
+
+    window.exportBackupJSON = function() {
+      const payload = {
+        app: 'Zentavo',
+        version: '1.0.0',
+        exportedAt: new Date().toISOString(),
+        data: state,
+      };
+      const jsonStr = JSON.stringify(payload, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zentavo_backup_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showCCBanner('✓ Copia de seguridad completa (.JSON) exportada.');
+    };
+
+    window.triggerImportJSONFile = function() {
+      const fileInput = document.getElementById('jsonFileInput');
+      fileInput.value = '';
+      fileInput.click();
+    };
+
+    document.getElementById('jsonFileInput').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          const candidate = (parsed && parsed.data && Array.isArray(parsed.data.accounts)) ? parsed.data : parsed;
+          if (!candidate || !Array.isArray(candidate.accounts) || !Array.isArray(candidate.transactions)) {
+            showCCBanner('Estructura JSON inválida: faltan cuentas o transacciones.', true);
+            return;
+          }
+          state = candidate;
+          saveState();
+          renderControlCenterContent();
+          showCCBanner(`✓ Respaldo importado con éxito (${state.accounts.length} cuentas, ${state.transactions.length} movimientos).`);
+        } catch (err) {
+          showCCBanner('Error al leer el archivo .JSON seleccionado.', true);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Initial boot
+    renderApp();
+
+    // Register Service Worker for Offline PWA Support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .catch((err) => console.warn('Service Worker registration warning:', err));
+      });
+    }
+  </script>
+</body>
+</html>

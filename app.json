@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Zentavo Finanzas",
+    "slug": "zentavo-finanzas",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#070E1A"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.zentavo.finanzas"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#070E1A"
+      },
+      "package": "com.zentavo.finanzas"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
